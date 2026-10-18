@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Nhi - Hành Trình Ngôi Sao & Hoàng Tử Bé 20/10 🌹✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700;800&family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(ellipse at bottom, #0d1527 0%, #030712 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        .font-handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .font-header {
+            font-family: 'Comfortaa', cursive;
+        }
+
+        /* Starry background effect */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: transparent url('https://user-images.githubusercontent.com/2673119/40575971-41762e8a-611a-11e8-9036-747f42cf432a.png') repeat top center;
+            opacity: 0.75;
+        }
+
+        /* Continuous Scarf Wave */
+        @keyframes scarfWave {
+            0%, 100% { transform: rotate(0deg) skewY(0deg) scaleY(1); }
+            50% { transform: rotate(8deg) skewY(5deg) scaleY(1.04); }
+        }
+
+        .scarf-animation {
+            transform-origin: 150px 98px;
+            animation: scarfWave 3.2s ease-in-out infinite;
+        }
+
+        /* Smooth Tail wag animation for the Fox */
+        @keyframes tailWagSmooth {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-14deg) translateY(-2px); }
+        }
+
+        .fox-tail-anim {
+            transform-origin: 250px 240px;
+            animation: tailWagSmooth 1.8s ease-in-out infinite;
+        }
+
+        /* Fox ears twitching */
+        @keyframes earTwitchSmooth {
+            0%, 88%, 100% { transform: rotate(0deg); }
+            92% { transform: rotate(-6deg); }
+            96% { transform: rotate(4deg); }
+        }
+
+        .fox-head-group {
+            transform-origin: 235px 170px;
+            animation: earTwitchSmooth 4s ease-in-out infinite;
+        }
+
+        /* Little Prince head tilt animation */
+        @keyframes headTilt {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            50% { transform: rotate(3deg) translateY(-2px); }
+        }
+
+        .prince-head-anim {
+            transform-origin: 150px 75px;
+            animation: headTilt 4s ease-in-out infinite;
+        }
+
+        /* Blink animation */
+        @keyframes blinkEyes {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.08); }
+        }
+
+        .blink-anim {
+            transform-origin: 150px 72px;
+            animation: blinkEyes 3.8s infinite;
+        }
+
+        /* Floating interaction hearts */
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-90px) scale(1.4) rotate(20deg); opacity: 0; }
+        }
+
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatHeart 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            font-size: 24px;
+            z-index: 60;
+            filter: drop-shadow(0 4px 8px rgba(244, 63, 94, 0.6));
+        }
+
+        /* Gentle Planet Hovering Animation */
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(0.5deg); }
+        }
+
+        .floating-world {
+            animation: gentleFloat 4.5s ease-in-out infinite;
+        }
+
+        /* Letter & Ending Container */
+        .letter-container {
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: scale(0.85);
+        }
+
+        .letter-container.show {
+            max-height: 1200px;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .ending-container {
+            transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: scale(0.9);
+        }
+
+        .ending-container.show {
+            max-height: 500px;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Falling items (Petals & Stars) */
+        .falling-item {
+            position: fixed;
+            top: -10%;
+            user-select: none;
+            pointer-events: none;
+            z-index: 2;
+            animation: fallAnimation linear infinite;
+        }
+
+        @keyframes fallAnimation {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(110vh) translateX(110px) rotate(720deg);
+                opacity: 0.1;
+            }
+        }
+
+        /* Glassmorphism UI */
+        .glass-space {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-letter {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(251, 207, 232, 0.9);
+            box-shadow: 0 20px 60px rgba(244, 114, 182, 0.4);
+        }
+
+        /* Cursor blink for typewriter */
+        .cursor-blink::after {
+            content: '|';
+            animation: blink 0.8s infinite;
+            color: #e11d48;
+            font-weight: bold;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Flying Star indicator */
+        #magic-star {
+            position: fixed;
+            z-index: 100;
+            width: 42px;
+            height: 42px;
+            margin-left: -21px;
+            margin-top: -21px;
+            pointer-events: none;
+            transition: transform 0.05s linear;
+            opacity: 0;
+            filter: drop-shadow(0 0 14px #fef08a) drop-shadow(0 0 28px #facc15);
+        }
+
+        /* Stardust trail */
+        .star-dust {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99;
+            border-radius: 50%;
+            background: #fef08a;
+            box-shadow: 0 0 10px #facc15;
+            animation: fadeDust 0.85s ease-out forwards;
+        }
+
+        /* Story Cloud Card Popup Styling */
+        .story-cloud-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(254, 240, 138, 0.9);
+            box-shadow: 0 15px 35px rgba(234, 179, 8, 0.25), 0 0 25px rgba(244, 114, 182, 0.3);
+            border-radius: 2rem;
+            transform: scale(0.8) translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .story-cloud-card.show {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Planet nodes styling */
+        .planet-node {
+            position: absolute;
+            transition: all 0.6s ease;
+            opacity: 0.35;
+            transform: scale(0.85);
+        }
+
+        .planet-node.active {
+            opacity: 1;
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 18px rgba(253, 224, 71, 0.85));
+        }
+
+        /* Bouquet glow */
+        @keyframes bouquetGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(244, 63, 94, 0.4)); }
+            50% { filter: drop-shadow(0 0 25px rgba(244, 63, 94, 0.7)); }
+        }
+
+        .bouquet-glow {
+            animation: bouquetGlow 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="relative flex items-center justify-center min-h-screen p-3 md:p-6 overflow-x-hidden selection:bg-pink-500 selection:text-white">
+
+    <div class="stars-bg"></div>
+    <div id="rain-items-container" class="fixed inset-0 pointer-events-none z-1"></div>
+
+    <!-- Guided Magic Star -->
+    <div id="magic-star">
+        <svg viewBox="0 0 100 100" class="w-full h-full text-amber-300 fill-current animate-spin" style="animation-duration: 3.5s;">
+            <polygon points="50,0 63,38 100,50 63,63 50,100 38,63 0,50 38,38" />
+        </svg>
+    </div>
+
+    <!-- Audio & Confetti Control Buttons -->
+    <div id="control-buttons" class="fixed top-4 right-4 z-50 flex gap-3 opacity-0 transition-opacity duration-1000 pointer-events-none">
+        <button id="re-fire-btn" title="Bắn bão hoa ngập màn hình!" class="glass-space w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center text-yellow-300 hover:text-white shadow-xl hover:scale-110 active:scale-95 transition-all">
+            <i class="fa-solid fa-wand-magic-sparkles text-lg md:text-xl"></i>
+        </button>
+        <button id="music-btn" title="Bật/Tắt nhạc nền" class="glass-space w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center text-pink-300 hover:text-white shadow-xl hover:scale-110 active:scale-95 transition-all">
+            <i id="music-icon" class="fa-solid fa-music text-lg md:text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Background Music Audio Tag -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- INTERACTIVE MINI-CHALLENGE CLOUD MODAL -->
+    <div id="story-cloud-modal" class="fixed inset-x-4 top-1/2 -translate-y-1/2 max-w-lg mx-auto z-50 story-cloud-card p-6 md:p-8 text-slate-800 text-center flex flex-col items-center">
+        <!-- Floating Cloud Background Accents -->
+        <div class="absolute -top-6 -left-6 text-5xl opacity-80 pointer-events-none filter drop-shadow">☁️</div>
+        <div class="absolute -bottom-6 -right-6 text-5xl opacity-80 pointer-events-none filter drop-shadow">☁️</div>
+        <div class="absolute -top-5 right-8 text-4xl opacity-70 pointer-events-none">✨</div>
+
+        <div id="cloud-icon" class="text-4xl md:text-5xl mb-2 animate-bounce">🌹</div>
+        <h3 id="cloud-title" class="text-xl md:text-2xl font-bold text-amber-600 font-header mb-2">1. Hoa Hồng B-612</h3>
+        
+        <!-- Challenge Section -->
+        <div id="challenge-section" class="w-full flex flex-col items-center">
+            <p id="cloud-prompt" class="text-sm md:text-base text-slate-700 font-semibold mb-4 leading-relaxed"></p>
+            <div id="cloud-options" class="w-full space-y-2 mb-2"></div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="result-section" class="w-full flex flex-col items-center hidden">
+            <p id="cloud-text" class="text-sm md:text-base text-slate-600 font-medium leading-relaxed italic mb-3"></p>
+            <div class="w-full bg-pink-100/80 rounded-xl p-3 border border-pink-200 text-xs md:text-sm text-pink-700 font-semibold mb-4" id="cloud-moral"></div>
+            <button onclick="nextStoryStep()" class="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-pink-500 hover:from-amber-300 hover:to-pink-400 text-white font-bold rounded-full shadow-lg transform hover:scale-105 active:scale-95 transition-all text-sm flex items-center gap-2">
+                <span>Tiếp tục hành trình</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== BƯỚC 1: MỞ CÁNH CỔNG ==================== -->
+    <div id="lock-screen" class="fixed inset-0 z-40 flex items-center justify-center p-4 transition-all duration-1000">
+        <div class="glass-space max-w-md w-full p-8 rounded-3xl text-center relative overflow-hidden border border-amber-200/30">
+            
+            <div class="mb-6 relative z-10">
+                <div class="w-20 h-20 bg-pink-900/40 border border-pink-400/50 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-400 shadow-lg text-4xl shadow-pink-500/20">
+                    🌹
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold text-amber-200 mb-2 font-header">Hành Tinh B-612 🌟</h1>
+                <p class="text-xs md:text-sm text-pink-200/90 font-medium">Nhập mật khẩu (2210) để bắt đầu hành trình cùng Hoàng Tử Bé nhé!</p>
+            </div>
+
+            <form id="lock-form" onsubmit="event.preventDefault(); checkPassword();" class="space-y-4 relative z-10">
+                <div class="relative">
+                    <input type="password" id="password-input" maxlength="4" placeholder="••••" 
+                        class="w-full px-5 py-3.5 rounded-2xl text-center text-2xl font-bold tracking-widest text-amber-300 bg-black/40 border border-pink-400/40 focus:border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300/50 transition-all shadow-inner placeholder:text-pink-300/40">
+                </div>
+
+                <p id="error-msg" class="text-xs text-rose-300 font-semibold min-h-[20px] transition-all opacity-0"></p>
+
+                <button type="submit" 
+                    class="w-full py-3.5 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:from-pink-500 hover:to-amber-400 text-white font-bold rounded-2xl shadow-lg hover:shadow-pink-500/40 transform hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 font-header text-sm">
+                    <span>Mở Cổng Ngân Hà 🎵</span>
+                    <i class="fa-solid fa-sparkles"></i>
+                </button>
+            </form>
+            <p class="text-xs text-amber-200/60 mt-6 italic">Gợi ý: Mật khẩu là ngày 2210 ✨</p>
+        </div>
+    </div>
+
+    <!-- ==================== BƯỚC 2: KHÁM PHÁ 5 HÀNH TINH ==================== -->
+    <div id="planets-overlay" class="fixed inset-0 pointer-events-none z-20 opacity-0 transition-opacity duration-700">
+        <!-- Stage 1: B-612 -->
+        <div id="planet-1" class="planet-node top-[12%] left-[8%] md:left-[15%] text-center">
+            <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-rose-500/30 border-2 border-rose-300 flex items-center justify-center text-2xl shadow-lg shadow-rose-500/40 mx-auto">🌹</div>
+            <span class="text-xs font-bold text-pink-200 bg-black/60 px-2.5 py-1 rounded-full mt-1 inline-block border border-pink-400/30">1. Hoa Hồng B-612</span>
+        </div>
+
+        <!-- Stage 2: King Planet -->
+        <div id="planet-2" class="planet-node top-[15%] right-[8%] md:right-[15%] text-center">
+            <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-amber-500/30 border-2 border-amber-300 flex items-center justify-center text-2xl shadow-lg shadow-amber-500/40 mx-auto">👑</div>
+            <span class="text-xs font-bold text-amber-200 bg-black/60 px-2.5 py-1 rounded-full mt-1 inline-block border border-amber-400/30">2. Tinh cầu Vị Vua</span>
+        </div>
+
+        <!-- Stage 3: Conceited Man -->
+        <div id="planet-3" class="planet-node top-[48%] left-[5%] md:left-[10%] text-center">
+            <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-purple-500/30 border-2 border-purple-300 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/40 mx-auto">🎩</div>
+            <span class="text-xs font-bold text-purple-200 bg-black/60 px-2.5 py-1 rounded-full mt-1 inline-block border border-purple-400/30">3. Kẻ Khoe Khoang</span>
+        </div>
+
+        <!-- Stage 4: Lamplighter -->
+        <div id="planet-4" class="planet-node top-[50%] right-[5%] md:right-[10%] text-center">
+            <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-yellow-500/30 border-2 border-yellow-300 flex items-center justify-center text-2xl shadow-lg shadow-yellow-500/40 mx-auto">🕯️</div>
+            <span class="text-xs font-bold text-yellow-200 bg-black/60 px-2.5 py-1 rounded-full mt-1 inline-block border border-yellow-400/30">4. Người Thắp Đèn</span>
+        </div>
+
+        <!-- Stage 5: Earth & Fox -->
+        <div id="planet-5" class="planet-node bottom-[18%] left-[50%] -translate-x-1/2 text-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-emerald-500/30 border-2 border-emerald-300 flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/40 mx-auto">🦊</div>
+            <span class="text-xs font-bold text-emerald-200 bg-black/60 px-3 py-1 rounded-full mt-1 inline-block border border-emerald-400/30">5. Trái Đất & Chú Cáo</span>
+        </div>
+    </div>
+
+    <!-- ==================== BƯỚC 3: BÓ HOA & LÁ THƯ & MÀN KẾT THÚC ==================== -->
+    <div id="main-content" class="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-1000 py-4">
+
+        <div id="prince-wrapper" class="relative w-full flex flex-col items-center">
+
+            <!-- Click Hint Bubble -->
+            <div id="click-hint" class="bg-amber-100/95 text-pink-700 px-5 py-2.5 rounded-full text-xs md:text-sm font-bold shadow-2xl animate-bounce flex items-center gap-2 mb-2 z-30 border-2 border-pink-300 cursor-pointer opacity-0 transition-opacity duration-500" onclick="openLetter()">
+                <span class="text-base">💌</span>
+                <span>Nhi hãy chạm vào bó hoa để tự tay mở lá thư nhé!</span>
+            </div>
+
+            <!-- SVG Vector Scene -->
+            <div id="prince-target" class="relative w-80 h-96 md:w-[460px] md:h-[480px] flex items-center justify-center cursor-pointer group" onclick="openLetter()">
+                
+                <svg viewBox="0 0 340 380" class="w-full h-full drop-shadow-[0_15px_35px_rgba(244,114,182,0.35)]">
+                    <defs>
+                        <radialGradient id="b612Grad" cx="50%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#3b82f6" />
+                            <stop offset="25%" stop-color="#1e3a8a" />
+                            <stop offset="65%" stop-color="#0f172a" />
+                            <stop offset="100%" stop-color="#020617" />
+                        </radialGradient>
+
+                        <radialGradient id="planetGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.6" />
+                            <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0" />
+                        </radialGradient>
+
+                        <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fef08a" />
+                            <stop offset="50%" stop-color="#fde047" />
+                            <stop offset="100%" stop-color="#eab308" />
+                        </linearGradient>
+
+                        <linearGradient id="scarfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fef08a" />
+                            <stop offset="70%" stop-color="#facc15" />
+                            <stop offset="100%" stop-color="#ca8a04" />
+                        </linearGradient>
+
+                        <linearGradient id="coatGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#16a34a" />
+                            <stop offset="100%" stop-color="#14532d" />
+                        </linearGradient>
+
+                        <linearGradient id="foxBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fb923c" />
+                            <stop offset="60%" stop-color="#ea580c" />
+                            <stop offset="100%" stop-color="#c2410c" />
+                        </linearGradient>
+
+                        <linearGradient id="roseWrapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbcfe8" />
+                            <stop offset="50%" stop-color="#f472b6" />
+                            <stop offset="100%" stop-color="#db2777" />
+                        </linearGradient>
+
+                        <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3" />
+                        </filter>
+                    </defs>
+
+                    <!-- PLANET B-612 -->
+                    <g class="floating-world">
+                        <ellipse cx="170" cy="290" rx="155" ry="75" fill="url(#planetGlow)" />
+                        <ellipse cx="170" cy="295" rx="145" ry="65" fill="url(#b612Grad)" stroke="#93c5fd" stroke-width="2.2" />
+                        
+                        <ellipse cx="85" cy="290" rx="12" ry="5" fill="#1e293b" opacity="0.6" />
+                        <ellipse cx="255" cy="300" rx="16" ry="7" fill="#1e293b" opacity="0.5" />
+                        <ellipse cx="170" cy="325" rx="20" ry="8" fill="#0f172a" opacity="0.7" />
+                        <ellipse cx="120" cy="315" rx="9" ry="4" fill="#1e293b" opacity="0.4" />
+
+                        <path d="M 50 280 L 58 268 L 66 280 Z" fill="#334155" stroke="#f43f5e" stroke-width="1" />
+                        <ellipse cx="58" cy="268" rx="4" ry="1.5" fill="#f43f5e" />
+
+                        <!-- SINGLE ROSE IN DOME -->
+                        <g transform="translate(275, 245)">
+                            <path d="M -12 25 Q -12 -15 0 -15 Q 12 -15 12 25 Z" fill="rgba(255,255,255,0.18)" stroke="#fef08a" stroke-width="1" />
+                            <ellipse cx="0" cy="25" rx="13" ry="3" fill="#1e293b" />
+                            <path d="M0 25 Q-2 10 0 0" stroke="#22c55e" stroke-width="2" fill="none" />
+                            <circle cx="0" cy="-2" r="5" fill="#f43f5e" />
+                            <circle cx="-1" cy="-3" r="3" fill="#fb7185" />
+                        </g>
+
+                        <ellipse cx="150" cy="236" rx="28" ry="7" fill="#020617" opacity="0.6" />
+                        <ellipse cx="230" cy="242" rx="22" ry="6" fill="#020617" opacity="0.6" />
+
+                        <!-- RED FOX -->
+                        <g class="cursor-pointer group/fox" onclick="interactFox(event)">
+                            <g class="fox-tail-anim">
+                                <path d="M 245 220 C 275 210, 295 180, 278 135 C 258 165, 238 200, 245 220 Z" fill="url(#foxBodyGrad)" filter="url(#softShadow)" />
+                                <path d="M 278 135 C 273 148, 261 160, 256 168 C 266 158, 274 148, 278 135 Z" fill="#ffffff" />
+                            </g>
+
+                            <path d="M 212 242 C 208 190, 240 185, 252 242 Z" fill="url(#foxBodyGrad)" />
+                            <path d="M 220 205 C 227 195, 238 195, 244 212 C 235 228, 224 225, 220 205 Z" fill="#fff1f2" />
+
+                            <g class="fox-head-group">
+                                <path d="M 208 160 L 198 120 L 222 142 Z" fill="#ea580c" />
+                                <path d="M 209 156 L 202 125 L 219 143 Z" fill="#7c2d12" />
+
+                                <path d="M 238 160 L 253 122 L 225 144 Z" fill="#ea580c" />
+                                <path d="M 236 156 L 248 126 L 227 144 Z" fill="#7c2d12" />
+
+                                <path d="M 202 158 C 202 138, 244 138, 244 158 C 244 178, 223 190, 223 190 C 223 190, 202 178, 202 158 Z" fill="url(#foxBodyGrad)" filter="url(#softShadow)" />
+                                <path d="M 205 160 C 205 160, 223 167, 223 190 C 223 167, 241 160, 241 160 C 234 180, 212 180, 205 160 Z" fill="#ffffff" />
+
+                                <ellipse cx="223" cy="187" rx="3.5" ry="2.5" fill="#1e293b" />
+                                <ellipse cx="215" cy="158" rx="3" ry="4.5" fill="#0f172a" />
+                                <circle cx="214" cy="156" r="1.2" fill="#ffffff" />
+                                <ellipse cx="231" cy="158" rx="3" ry="4.5" fill="#0f172a" />
+                                <circle cx="230" cy="156" r="1.2" fill="#ffffff" />
+                                <ellipse cx="209" cy="166" rx="3" ry="1.5" fill="#f43f5e" opacity="0.4" />
+                                <ellipse cx="237" cy="166" rx="3" ry="1.5" fill="#f43f5e" opacity="0.4" />
+                            </g>
+                        </g>
+
+                        <!-- LITTLE PRINCE -->
+                        <g>
+                            <path class="scarf-animation" d="M138 98 Q95 90 60 120 Q85 130 135 106 Z" fill="url(#scarfGrad)" filter="url(#softShadow)" />
+
+                            <g class="prince-head-anim">
+                                <path d="M125 60 C110 32, 185 30, 175 60 C190 48, 195 72, 180 80 C125 82, 115 72, 125 60 Z" fill="url(#hairGrad)" filter="url(#softShadow)" />
+                                <circle cx="132" cy="46" r="10" fill="#fef08a" />
+                                <circle cx="150" cy="42" r="12" fill="#fde047" />
+                                <circle cx="168" cy="48" r="9" fill="#fef08a" />
+                                <path d="M140 38 Q155 28 165 38" stroke="#ca8a04" stroke-width="2" fill="none" stroke-linecap="round" />
+
+                                <circle cx="150" cy="74" r="21" fill="#fde68a" />
+                                <ellipse cx="137" cy="80" rx="4.5" ry="2.5" fill="#f43f5e" opacity="0.45" />
+                                <ellipse cx="163" cy="80" rx="4.5" ry="2.5" fill="#f43f5e" opacity="0.45" />
+
+                                <g class="blink-anim">
+                                    <ellipse cx="142" cy="73" rx="2.5" ry="3.5" fill="#334155" />
+                                    <circle cx="141" cy="71" r="1" fill="#ffffff" />
+                                    <ellipse cx="158" cy="73" rx="2.5" ry="3.5" fill="#334155" />
+                                    <circle cx="157" cy="71" r="1" fill="#ffffff" />
+                                </g>
+
+                                <circle cx="150" cy="75" r="0.8" fill="#d97706" />
+                                <path d="M145 81 Q150 86 155 81" stroke="#e11d48" stroke-width="1.8" fill="none" stroke-linecap="round" />
+                            </g>
+
+                            <g>
+                                <path d="M132 96 L168 96 L178 185 L122 185 Z" fill="url(#coatGrad)" />
+                                <path d="M138 96 L150 120 L132 108 Z" fill="#be123c" />
+                                <path d="M162 96 L150 120 L168 108 Z" fill="#be123c" />
+                                <rect x="130" y="136" width="40" height="7" fill="#facc15" rx="2" />
+                                <rect x="146" y="134" width="8" height="11" fill="#ca8a04" rx="1.5" />
+
+                                <rect x="134" y="185" width="12" height="42" fill="#fef08a" />
+                                <rect x="154" y="185" width="12" height="42" fill="#fef08a" />
+                                <path d="M131 224 L148 224 L146 238 L128 238 Z" fill="#854d0e" />
+                                <path d="M152 224 L169 224 L171 238 L154 238 Z" fill="#854d0e" />
+                            </g>
+
+                            <!-- BÓ HOA HỒNG RỰC RỠ -->
+                            <g class="bouquet-glow transition-transform duration-300 group-hover:scale-105" transform="translate(92, 100)">
+                                <path d="M15 50 L58 125 L101 50 Z" fill="url(#roseWrapGrad)" filter="url(#softShadow)" />
+                                <path d="M5 38 Q58 65 111 38 L58 125 Z" fill="#f43f5e" />
+                                
+                                <path d="M42 85 Q58 92 74 85 Q58 105 42 85 Z" fill="#facc15" />
+                                <circle cx="58" cy="88" r="4.5" fill="#ca8a04" />
+
+                                <circle cx="58" cy="28" r="17" fill="#f43f5e" />
+                                <circle cx="58" cy="28" r="12" fill="#e11d48" />
+                                <circle cx="58" cy="28" r="7" fill="#be123c" />
+                                <circle cx="58" cy="28" r="3" fill="#9f1239" />
+
+                                <circle cx="34" cy="20" r="14" fill="#fb7185" />
+                                <circle cx="34" cy="20" r="9" fill="#f43f5e" />
+                                <circle cx="34" cy="20" r="4.5" fill="#be123c" />
+
+                                <circle cx="82" cy="20" r="14" fill="#fb7185" />
+                                <circle cx="82" cy="20" r="9" fill="#f43f5e" />
+                                <circle cx="82" cy="20" r="4.5" fill="#be123c" />
+
+                                <circle cx="58" cy="5" r="13" fill="#fda4af" />
+                                <circle cx="58" cy="5" r="8" fill="#e11d48" />
+
+                                <circle cx="20" cy="38" r="11" fill="#fecdd3" />
+                                <circle cx="20" cy="38" r="6" fill="#f43f5e" />
+
+                                <circle cx="96" cy="38" r="11" fill="#fecdd3" />
+                                <circle cx="96" cy="38" r="6" fill="#f43f5e" />
+
+                                <circle cx="58" cy="-10" r="10" fill="#fef08a" />
+                                <circle cx="58" cy="-10" r="5" fill="#ca8a04" />
+
+                                <path d="M10 20 Q-2 10 10 0" stroke="#4ade80" stroke-width="3" fill="none" stroke-linecap="round" />
+                                <path d="M106 20 Q118 10 106 0" stroke="#4ade80" stroke-width="3" fill="none" stroke-linecap="round" />
+
+                                <g transform="translate(38, 48)">
+                                    <rect x="0" y="0" width="40" height="26" rx="4" fill="#ffffff" stroke="#f43f5e" stroke-width="1.8" filter="url(#softShadow)" />
+                                    <path d="M0 0 L20 15 L40 0" fill="none" stroke="#f43f5e" stroke-width="1.8" />
+                                    <circle cx="20" cy="15" r="3.5" fill="#e11d48" />
+                                </g>
+                            </g>
+
+                            <path d="M128 102 Q112 128 135 132" stroke="#fde68a" stroke-width="6.5" stroke-linecap="round" fill="none" />
+                            <path d="M172 102 Q188 128 165 132" stroke="#fde68a" stroke-width="6.5" stroke-linecap="round" fill="none" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- LÁ THƯ CUỐI CÙNG -->
+        <div id="letter-card" class="letter-container w-full mt-2">
+            <div class="glass-letter p-6 md:p-8 rounded-3xl text-gray-800 relative text-left">
+                
+                <div class="flex justify-between items-center border-b-2 border-pink-200 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🌹</span>
+                        <h2 class="text-xl md:text-2xl font-bold text-pink-700 font-handwriting">Thư Gửi Nhi Từ Hoàng Tử Bé</h2>
+                    </div>
+                    <span class="text-xs text-pink-600 font-bold bg-pink-100 px-3 py-1 rounded-full border border-pink-300">20/10 ✨</span>
+                </div>
+
+                <div class="min-h-[140px] text-gray-700 text-sm md:text-base leading-relaxed font-medium">
+                    <p id="typewriter-text" class="inline cursor-blink"></p>
+                </div>
+
+                <div id="letter-footer" class="mt-6 pt-3 border-t border-pink-200 flex justify-between items-end opacity-0 transition-opacity duration-1000">
+                    <div class="text-xs text-pink-500 italic">
+                        "Người ta chỉ nhìn rõ được bằng trái tim..." 🌟
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-pink-500 font-medium">Gửi tặng Nhi,</p>
+                        <p class="text-lg font-bold text-pink-600 font-handwriting">The Little Prince & Your Friend 🦊</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH KẾT THÚC (ENDING SCREEN) -->
+        <div id="ending-screen" class="ending-container w-full mt-4">
+            <div class="glass-space p-6 md:p-8 rounded-3xl text-center text-white border border-amber-300/40 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 text-4xl opacity-50 pointer-events-none">🌟</div>
+                <div class="absolute -bottom-4 -left-4 text-4xl opacity-50 pointer-events-none">🦊</div>
+                
+                <h3 class="text-lg md:text-xl font-bold font-header text-amber-300 mb-2">Và hành trình vẫn tiếp tục… 🚀</h3>
+                <p class="text-sm md:text-base text-pink-100 font-medium leading-relaxed mb-4 italic">
+                    "Mong thế giới của Nhi luôn có những điều nhỏ bé khiến cậu mỉm cười."
+                </p>
+                <div class="inline-block bg-pink-900/50 border border-pink-400/40 px-6 py-2.5 rounded-full text-pink-200 font-semibold text-xs md:text-sm shadow-inner">
+                    Cảm ơn cậu đã ghé thăm hành tinh B-612. 🌹
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const CORRECT_PASSWORD = "2210";
+        const WISH_TEXT = "Chúc Nhi 20/10 luôn luôn mạnh khỏe, vui vẻ, xinh đẹp và rạng rỡ như ánh nắng ban mai. Mong Nhi lúc nào cũng giữ được nụ cười tươi tắn, đôi mắt long lanh và trái tim ấm áp. Chúc Nhi luôn gặp nhiều may mắn, học tập thật tốt, mọi điều mong muốn đều trở thành hiện thực và mỗi ngày đều tràn ngập niềm vui.";
+
+        const STORIES = [
+            {
+                title: "1. Tinh Cầu Hoa Hồng B-612 🌹",
+                icon: "🌹",
+                prompt: "Trước khi ngắm nhìn bông hoa đặc biệt này, Nhi muốn chăm sóc nó bằng cách nào?",
+                options: [
+                    "💧 Tưới nước bằng sự dịu dàng và kiên nhẫn",
+                    "🛡️ Đặt dưới chiếc lồng kính trong suốt bảo vệ",
+                    "🌸 Lắng nghe những lời thì thầm dịu ngọt mỗi ngày"
+                ],
+                quote: `"Chính thời gian mà bạn chăm sóc cho bông hoa hồng của bạn mới làm cho bông hoa ấy trở nên quan trọng đến thế."`,
+                moral: "✨ Dù ngoài kia có hàng ngàn bông hoa, Nhi vẫn là bông hoa xinh đẹp và đặc biệt nhất!"
+            },
+            {
+                title: "2. Tinh Cầu Vị Vua 👑",
+                icon: "👑",
+                prompt: "Nhà Vua ban tặng cho Nhi một đặc ân trên tinh cầu. Hãy chọn một ngôi sao may mắn để thắp sáng:",
+                options: [
+                    "⭐ Ngôi sao Bình An & Thư Thái",
+                    "🌟 Ngôi sao Hạnh Phúc & Nụ Cười",
+                    "✨ Ngôi sao May Mắn & Thành Công"
+                ],
+                quote: `"Cần phải yêu cầu ở mỗi người cái mà người đó có thể làm được. Quyền lực trước hết dựa trên lý trí."`,
+                moral: "✨ Chúc Nhi luôn tự chủ, tự tin và vững bước trên con đường riêng của mình!"
+            },
+            {
+                title: "3. Tinh Cầu Kẻ Khoe Khoang 🎩",
+                icon: "🎩",
+                prompt: "Hành tinh này rất thích những lời ca tụng. Theo Nhi, điều gì ở bản thân khiến Nhi cảm thấy tự hào nhất?",
+                options: [
+                    "💖 Nụ cười rạng rỡ luôn lan tỏa năng lượng tích cực",
+                    "🌿 Trái tim ấm áp, luôn quan tâm và thấu hiểu",
+                    "💫 Sự kiên cường và tinh thần lạc quan đáng yêu"
+                ],
+                quote: `"Những người tự huyễn thường chỉ nghe thấy những lời khen ngợi..."`,
+                moral: "✨ Mong Nhi luôn giữ trọn nét hồn nhiên, chân thành và dịu dàng đáng yêu!"
+            },
+            {
+                title: "4. Tinh Cầu Người Thắp Đèn 🕯️",
+                icon: "🕯️",
+                prompt: "Người thắp đèn đang cần thêm chút ánh sáng. Điều gì thắp sáng tâm trạng của Nhi vào mỗi buổi sáng?",
+                options: [
+                    "☕ Một ly đồ uống yêu thích ngọt ngào",
+                    "🎶 Giai điệu âm nhạc du dương yêu thích",
+                    "💬 Một lời chúc hay tin nhắn bất ngờ"
+                ],
+                quote: `"Mệnh lệnh là mệnh lệnh! Nhưng công việc của ông ấy mang lại vẻ đẹp, chiếu sáng những vì sao."`,
+                moral: "✨ Chúc Nhi luôn kiên trì với những ước mơ và lan tỏa ánh sáng ấm áp đến mọi người xung quanh!"
+            },
+            {
+                title: "5. Trái Đất & Chú Cáo 🦊",
+                icon: "🦊",
+                prompt: "Chú cáo ngồi xuống bãi cỏ và hỏi Nhi một câu hỏi nhỏ:",
+                subPrompt: "“Điều gì làm một ngày bình thường trở nên đặc biệt?”",
+                options: [
+                    "🐾 Có một người bạn luôn đồng hành sẻ chia",
+                    "🌻 Những khoảnh khắc nhỏ bé bất ngờ dọc đường",
+                    "🍵 Cảm giác bình yên trọn vẹn trong tâm hồn"
+                ],
+                quote: `"Người ta chỉ nhìn thấy rõ ràng bằng trái tim. Cốt lõi là điều vô hình đối với mắt thường."`,
+                moral: "✨ Cảm ơn Nhi vì đã đến và làm cho thế giới xung quanh trở nên thật rực rỡ và ý nghĩa!"
+            }
+        ];
+
+        let currentStoryIndex = 0;
+        let storyPromiseResolve = null;
+
+        let isMusicPlaying = false;
+        let isLetterOpened = false;
+        const bgMusic = document.getElementById('bg-music');
+        const spaceFlowerIcons = ['🌹', '🌷', '🌻', '🌸', '🌼', '✨', '⭐', '💖', '💫'];
+
+        function triggerMassiveFlowerExplosion() {
+            confetti({
+                particleCount: 80,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#ec4899', '#f39c12', '#38bdf8', '#a855f7']
+            });
+
+            const defaults = {
+                origin: { y: 0.7 },
+                spread: 360,
+                ticks: 100,
+                gravity: 0.8,
+                decay: 0.94,
+                startVelocity: 30,
+                shapes: ['circle']
+            };
+
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    confetti({
+                        ...defaults,
+                        particleCount: 1,
+                        scalar: Math.random() * 1.5 + 1.2,
+                        origin: {
+                            x: Math.random(),
+                            y: Math.random() * 0.5 + 0.3
+                        }
+                    });
+                }, i * 60);
+            }
+        }
+
+        function interactFox(event) {
+            event.stopPropagation();
+            const emojis = ['🦊', '💖', '✨', '🌹', '🌸'];
+            const container = document.body;
+            
+            for (let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                const rect = event.currentTarget.getBoundingClientRect();
+                const x = (event.clientX || (rect.left + rect.width / 2)) + (Math.random() * 40 - 20);
+                const y = (event.clientY || (rect.top + rect.height / 2)) + (Math.random() * 40 - 20);
+                
+                heart.style.left = `${x}px`;
+                heart.style.top = `${y}px`;
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1300);
+            }
+        }
+
+        function createRainSpaceItems() {
+            const container = document.getElementById('rain-items-container');
+            if (!container) return;
+
+            for (let i = 0; i < 24; i++) {
+                const item = document.createElement('div');
+                item.className = 'falling-item';
+                item.textContent = spaceFlowerIcons[Math.floor(Math.random() * spaceFlowerIcons.length)];
+                item.style.left = `${Math.random() * 100}vw`;
+                item.style.animationDuration = `${Math.random() * 6 + 6}s`;
+                item.style.animationDelay = `${Math.random() * 5}s`;
+                item.style.fontSize = `${Math.random() * 14 + 16}px`;
+                container.appendChild(item);
+            }
+        }
+
+        function showStoryCloud(index) {
+            return new Promise((resolve) => {
+                storyPromiseResolve = resolve;
+                currentStoryIndex = index;
+                const modal = document.getElementById('story-cloud-modal');
+                const titleEl = document.getElementById('cloud-title');
+                const iconEl = document.getElementById('cloud-icon');
+                const promptEl = document.getElementById('cloud-prompt');
+                const optionsEl = document.getElementById('cloud-options');
+                const textEl = document.getElementById('cloud-text');
+                const moralEl = document.getElementById('cloud-moral');
+
+                const challengeSec = document.getElementById('challenge-section');
+                const resultSec = document.getElementById('result-section');
+
+                const story = STORIES[index];
+                if (story && modal) {
+                    titleEl.textContent = story.title;
+                    iconEl.textContent = story.icon;
+                    
+                    let promptHtml = story.prompt;
+                    if (story.subPrompt) {
+                        promptHtml += `<br><span class="text-amber-600 font-bold italic mt-1 inline-block">${story.subPrompt}</span>`;
+                    }
+                    promptEl.innerHTML = promptHtml;
+
+                    challengeSec.classList.remove('hidden');
+                    resultSec.classList.add('hidden');
+
+                    textEl.textContent = story.quote;
+                    moralEl.textContent = story.moral;
+
+                    optionsEl.innerHTML = '';
+                    story.options.forEach((optText) => {
+                        const btn = document.createElement('button');
+                        btn.className = "w-full text-left px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-pink-50 border border-amber-200/80 hover:border-pink-300 text-slate-700 font-medium text-xs md:text-sm transition-all shadow-sm flex items-center justify-between group/opt transform hover:translate-x-1";
+                        btn.innerHTML = `<span>${optText}</span><i class="fa-solid fa-heart text-pink-500 opacity-0 group-hover/opt:opacity-100 transition-opacity"></i>`;
+                        btn.onclick = () => selectOption();
+                        optionsEl.appendChild(btn);
+                    });
+
+                    modal.classList.add('show');
+                } else {
+                    resolve();
+                }
+            });
+        }
+
+        function selectOption() {
+            confetti({
+                particleCount: 20,
+                spread: 50,
+                origin: { y: 0.55 },
+                colors: ['#f43f5e', '#facc15', '#ec4899']
+            });
+
+            const challengeSec = document.getElementById('challenge-section');
+            const resultSec = document.getElementById('result-section');
+
+            challengeSec.classList.add('hidden');
+            resultSec.classList.remove('hidden');
+        }
+
+        function nextStoryStep() {
+            const modal = document.getElementById('story-cloud-modal');
+            if (modal) modal.classList.remove('show');
+            if (storyPromiseResolve) {
+                storyPromiseResolve();
+                storyPromiseResolve = null;
+            }
+        }
+
+        function unlockAudioContext() {
+            if (bgMusic) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    updateMusicIcon();
+                }).catch(() => {
+                    isMusicPlaying = false;
+                    updateMusicIcon();
+                });
+            }
+        }
+
+        function checkPassword() {
+            const inputEl = document.getElementById('password-input');
+            const errorMsg = document.getElementById('error-msg');
+            if (!inputEl || !errorMsg) return;
+
+            const input = inputEl.value;
+
+            if (input === CORRECT_PASSWORD) {
+                errorMsg.classList.add('opacity-0');
+                unlockAudioContext();
+                startStarJourney();
+            } else {
+                errorMsg.textContent = "Mật khẩu chưa đúng rồi Nhi ơi! Nhập '2210' nhé 🌹";
+                errorMsg.classList.remove('opacity-0');
+                inputEl.classList.add('translate-x-2');
+                setTimeout(() => inputEl.classList.remove('translate-x-2'), 100);
+                setTimeout(() => inputEl.classList.add('-translate-x-2'), 200);
+                setTimeout(() => inputEl.classList.remove('-translate-x-2'), 300);
+            }
+        }
+
+        function startStarJourney() {
+            const lockScreen = document.getElementById('lock-screen');
+            const planetsOverlay = document.getElementById('planets-overlay');
+            const magicStar = document.getElementById('magic-star');
+            const mainContent = document.getElementById('main-content');
+            const controlButtons = document.getElementById('control-buttons');
+            const princeTarget = document.getElementById('prince-target');
+
+            if (lockScreen) {
+                lockScreen.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => { lockScreen.style.display = 'none'; }, 1000);
+            }
+
+            if (planetsOverlay) planetsOverlay.classList.remove('opacity-0');
+            if (mainContent) mainContent.classList.remove('opacity-0', 'pointer-events-none');
+            
+            playAudio();
+
+            const nodes = [
+                document.getElementById('planet-1'),
+                document.getElementById('planet-2'),
+                document.getElementById('planet-3'),
+                document.getElementById('planet-4'),
+                document.getElementById('planet-5')
+            ];
+
+            if (magicStar) magicStar.style.opacity = '1';
+
+            function leaveStarDust(x, y) {
+                const dust = document.createElement('div');
+                dust.className = 'star-dust';
+                dust.style.left = `${x}px`;
+                dust.style.top = `${y}px`;
+                dust.style.width = `${Math.random() * 8 + 4}px`;
+                dust.style.height = dust.style.width;
+                document.body.appendChild(dust);
+                setTimeout(() => dust.remove(), 850);
+            }
+
+            function moveStarTo(targetX, targetY, duration) {
+                return new Promise((resolve) => {
+                    if (!magicStar) return resolve();
+                    const startX = parseFloat(magicStar.style.left || window.innerWidth / 2);
+                    const startY = parseFloat(magicStar.style.top || window.innerHeight / 2);
+                    const startTime = performance.now();
+
+                    function animateStar(now) {
+                        const elapsed = now - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeProgress = progress < 0.5 
+                            ? 4 * progress * progress * progress 
+                            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                        const currentX = startX + (targetX - startX) * easeProgress;
+                        const currentY = startY + (targetY - startY) * easeProgress;
+
+                        magicStar.style.left = `${currentX}px`;
+                        magicStar.style.top = `${currentY}px`;
+
+                        if (Math.random() > 0.3) {
+                            leaveStarDust(currentX, currentY);
+                        }
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animateStar);
+                        } else {
+                            resolve();
+                        }
+                    }
+                    requestAnimationFrame(animateStar);
+                });
+            }
+
+            async function runJourney() {
+                if (!magicStar) return;
+                magicStar.style.left = `${window.innerWidth / 2}px`;
+                magicStar.style.top = `${window.innerHeight * 0.1}px`;
+
+                for (let i = 0; i < nodes.length; i++) {
+                    if (!nodes[i]) continue;
+                    const rect = nodes[i].getBoundingClientRect();
+                    const targetX = rect.left + rect.width / 2;
+                    const targetY = rect.top + rect.height / 2;
+
+                    await moveStarTo(targetX, targetY, 1100);
+                    nodes[i].classList.add('active');
+
+                    confetti({
+                        particleCount: 25,
+                        spread: 60,
+                        origin: { x: targetX / window.innerWidth, y: targetY / window.innerHeight },
+                        colors: ['#fef08a', '#f472b6', '#38bdf8']
+                    });
+
+                    await showStoryCloud(i);
+                    await new Promise(r => setTimeout(r, 200));
+                }
+
+                if (!princeTarget) return;
+                const princeRect = princeTarget.getBoundingClientRect();
+                const finalX = princeRect.left + princeRect.width * 0.5;
+                const finalY = princeRect.top + princeRect.height * 0.45;
+
+                await moveStarTo(finalX, finalY, 1300);
+
+                magicStar.style.transform = 'scale(2.5)';
+                magicStar.style.opacity = '0';
+                magicStar.style.transition = 'all 0.5s ease-out';
+
+                setTimeout(() => {
+                    if (planetsOverlay) planetsOverlay.classList.add('opacity-0');
+                    if (controlButtons) controlButtons.classList.remove('opacity-0', 'pointer-events-none');
+                    
+                    const clickHint = document.getElementById('click-hint');
+                    if (clickHint) {
+                        clickHint.classList.remove('opacity-0');
+                    }
+                    confetti({ particleCount: 40, spread: 70, origin: { y: 0.6 } });
+                }, 300);
+            }
+
+            setTimeout(runJourney, 400);
+        }
+
+        function openLetter() {
+            if (isLetterOpened) return;
+            isLetterOpened = true;
+
+            const letterCard = document.getElementById('letter-card');
+            const clickHint = document.getElementById('click-hint');
+
+            if (clickHint) {
+                clickHint.style.opacity = '0';
+                setTimeout(() => {
+                    if (clickHint && clickHint.parentNode) {
+                        clickHint.remove();
+                    }
+                }, 500);
+            }
+
+            if (letterCard) {
+                letterCard.classList.add('show');
+            }
+            triggerMassiveFlowerExplosion();
+
+            setTimeout(() => {
+                typeWriterEffect(WISH_TEXT, 'typewriter-text', 35);
+            }, 600);
+        }
+
+        function typeWriterEffect(text, elementId, speed) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            element.textContent = '';
+
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('cursor-blink');
+                    const footer = document.getElementById('letter-footer');
+                    if (footer) {
+                        footer.classList.remove('opacity-0');
+                    }
+                    
+                    // Hiển thị màn hình kết thúc sau khi gõ xong lá thư 1.5 giây
+                    setTimeout(() => {
+                        const endingScreen = document.getElementById('ending-screen');
+                        if (endingScreen) {
+                            endingScreen.classList.add('show');
+                            confetti({
+                                particleCount: 50,
+                                spread: 80,
+                                origin: { y: 0.85 },
+                                colors: ['#fef08a', '#f472b6', '#38bdf8', '#fb923c']
+                            });
+                        }
+                    }, 1500);
+                }
+            }
+            type();
+        }
+
+        function playAudio() {
+            if (!bgMusic) return;
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                updateMusicIcon();
+            }).catch(() => {
+                isMusicPlaying = false;
+                updateMusicIcon();
+            });
+        }
+
+        function toggleMusic() {
+            if (!bgMusic) return;
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    updateMusicIcon();
+                }).catch(err => {
+                    alert("Trình duyệt đang chặn tự động phát âm thanh, hãy thử nhấp vào biểu tượng nốt nhạc góc phải màn hình nhé!");
+                });
+            }
+            updateMusicIcon();
+        }
+
+        function updateMusicIcon() {
+            const musicIcon = document.getElementById('music-icon');
+            if (!musicIcon) return;
+            if (isMusicPlaying) {
+                musicIcon.className = 'fa-solid fa-music text-lg md:text-xl text-yellow-300 animate-spin';
+            } else {
+                musicIcon.className = 'fa-solid fa-volume-xmark text-lg md:text-xl text-rose-400';
+            }
+        }
+
+        document.getElementById('music-btn')?.addEventListener('click', toggleMusic);
+        document.getElementById('re-fire-btn')?.addEventListener('click', triggerMassiveFlowerExplosion);
+
+        window.onload = function() {
+            createRainSpaceItems();
+            document.getElementById('password-input')?.focus();
+            
+            document.body.addEventListener('click', function enableAudioOnFirstClick() {
+                if (!isMusicPlaying && bgMusic) {
+                    playAudio();
+                }
+            }, { once: true });
+        };
+    </script>
+</body>
+</html>
